@@ -268,3 +268,4 @@ bin/
 .vs/
 obj/
 package/
+logs/
