@@ -1,7 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "E:\\SouceCode\\AspSourceCode\\HuaKeWeb\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|e:\\soucecode\\aspsourcecode\\huakeweb\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 128,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,6 +35,19 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": ".gitignore",
+              "DocumentMoniker": "E:\\SouceCode\\AspSourceCode\\HuaKeWeb\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "E:\\SouceCode\\AspSourceCode\\HuaKeWeb\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AQIAAOkAAAAAAAAAAAAAAP8AAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-09-29T03:35:10.635Z",
+              "EditorCaption": ""
             }
           ]
         }
