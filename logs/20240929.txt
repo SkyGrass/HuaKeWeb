@@ -1,0 +1,12 @@
+2024/9/29 0:34:16
+   在 ZYSoft.DB.Common.SqlHelper.ExecuteDataTable(String SQLString)
+   在 ZYSoft.DB.Dal.ZYSoft_Common.ExecuteDataTable(String strSQL)
+   在 ZYSoft.DB.BLL.Common.ExecuteDataTable(String strSQL)
+   在 HuakeWeb.AppHelper.GetWxConfig(ZYSoftConfig& config, String& errMsg) 位置 H:\SouceCode\AspSourceCode\HuaKeWeb\Utils\AppHelper.cs:行号 36
+
+2024/9/29 0:34:20
+   在 ZYSoft.DB.Common.SqlHelper.ExecuteDataTable(String SQLString)
+   在 ZYSoft.DB.Dal.ZYSoft_Common.ExecuteDataTable(String strSQL)
+   在 ZYSoft.DB.BLL.Common.ExecuteDataTable(String strSQL)
+   在 HuakeWeb.AppHelper.GetWxConfig(ZYSoftConfig& config, String& errMsg) 位置 H:\SouceCode\AspSourceCode\HuaKeWeb\Utils\AppHelper.cs:行号 36
+
