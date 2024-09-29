@@ -8,18 +8,74 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no,viewport-fit:cover" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <link rel="icon" href="../../favicon.ico" />
+    <link rel="stylesheet" href="../../Content/Css/index.css" />
+    <script src="../../Content/Js/vue.min.js"></script>
+    <script src="../../Content/Js/vant.min.js"></script>
+    <script src="../../Content/Js/fly.min.js"></script>
+    <script src="../../Content/Js/dayjs.min.js"></script>
     <title></title>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
+    <style>
+        body html {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            background: #f6f6f6;
+        }
+    </style>
 </head>
 <body>
-    <div>
+    <script>
+        var vm = new Vue({ el: "root" })
+        fly.config.timeout = 60 * 1000;
+        fly.config.baseURL = "../handle/";
+        //添加请求拦截器
+        fly.interceptors.request.use((request) => {
+            vm.$toast.loading({ duration: 0, message: '加载中...', forbidClick: true });
+            //给所有请求添加自定义header
+            request.headers["X-Tag"] = "flyio";
+            //打印出请求体
+            console.log(request.body)
+            //终止请求
+            //var err=new Error("xxx")
+            //err.request=request
+            //return Promise.reject(new Error("")) 
+            //可以显式返回request, 也可以不返回，没有返回值时拦截器中默认返回request
+            return request;
+        })
+
+        //添加响应拦截器，响应拦截器会在then/catch处理之前执行
+        fly.interceptors.response.use(
+            (response) => {
+                vm.$toast.clear();
+                const _data = response.data;
+                const { state, msg, data } = _data;
+                if (state == 'success') {
+                    return data;
+                } else {
+                    vm.$toast.fail(msg);
+                    return data;
+                }
+            },
+            (err) => {
+                vm.$toast.clear();
+                vm.$dialog.alert({ title: '提示', message: '网络发生错误' })
+                //return Promise.resolve("ssss")
+            }
+        )
+        const sendPost = (url, data) => {
+            return fly.post(url, data);
+        }
+        const sendGet = (url, param) => {
+            return fly.get(url, param);
+        }
+    </script>
+    <div id="root">
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
     </div>
-    <script>
-        console.log(11)
-    </script>
+
 </body>
 </html>

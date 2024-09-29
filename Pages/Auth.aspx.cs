@@ -30,7 +30,7 @@ namespace HuakeWeb.Pages
                         DataTable userSession = null;
                         try
                         {
-                            userSession = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(@"select * from ZYSoftUserSession Where session = '{0}'", session));
+                            userSession = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_QUERY_USER_SESSION, session));
                         }
                         catch (Exception)
                         {
@@ -65,7 +65,7 @@ namespace HuakeWeb.Pages
                         }
                         catch (Exception)
                         {
-                            Global.errMsg = "查询系统授权参数发生异常,请检查系统配置";
+                            Global.errMsg = "查询系统授权参数发生异常\r\n请检查系统配置";
                             Response.Redirect(string.Format(@"sysError"), true);
                         }
                     }

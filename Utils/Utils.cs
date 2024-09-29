@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 
 namespace HuakeWeb.Utils
@@ -23,6 +26,27 @@ namespace HuakeWeb.Utils
                 s += str.Substring(r.Next(0, str.Length - 1), 1);
             }
             return s;
+        }
+
+        public static bool ReadStrem2Dic(Stream stream, out Dictionary<string, object> dic, out string errMsg)
+        {
+            errMsg = "";
+            dic = new Dictionary<string, object>();
+            using (var reader = new StreamReader(stream))
+            {
+                try
+                {
+                    string str = reader.ReadToEnd();
+                    dic = JsonConvert.DeserializeObject<Dictionary<string, object>>(str);
+                    return true;
+                }
+                catch (JsonException)
+                {
+                    errMsg = "请求入参json错误";
+                    return false;
+                }
+            }
+
         }
     }
 }
