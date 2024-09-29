@@ -1,46 +1,7 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\const.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:const.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\pages\\auth.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:pages\\auth.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\pages\\auth.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:pages\\auth.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\packages\\Microsoft.AspNet.FriendlyUrls.1.0.2\\readme.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:packages\\Microsoft.AspNet.FriendlyUrls.1.0.2\\readme.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|HuakeWeb||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\pages\\master\\site1.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
-      "RelativeMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|solutionrelative:pages\\master\\site1.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6082DFC3-B3C4-4002-88EE-E1A0C54409E3}|HuakeWeb.csproj|h:\\soucecode\\aspsourcecode\\huakeweb\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|909d16b3-c8e8-43d1-a2b8-26ea0d4b6b57"
-    }
-  ],
+  "WorkspaceRootPath": "H:\\AspSourceCode\\HuaKeWeb\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -48,12 +9,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 128,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -71,120 +28,8 @@
               "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RouteConfig.cs",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\App_Start\\RouteConfig.cs",
-              "RelativeDocumentMoniker": "App_Start\\RouteConfig.cs",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\App_Start\\RouteConfig.cs",
-              "RelativeToolTip": "App_Start\\RouteConfig.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAuwA0AAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-28T16:33:16.453Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Const.cs",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Const.cs",
-              "RelativeDocumentMoniker": "Const.cs",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Const.cs",
-              "RelativeToolTip": "Const.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAADwvwAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-28T16:32:54.013Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Auth.aspx.cs",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Pages\\Auth.aspx.cs",
-              "RelativeDocumentMoniker": "Pages\\Auth.aspx.cs",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Pages\\Auth.aspx.cs",
-              "RelativeToolTip": "Pages\\Auth.aspx.cs",
-              "ViewState": "AQIAADMAAAAAAAAAAAA0wDsAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-28T12:39:42.508Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Auth.aspx",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Pages\\Auth.aspx",
-              "RelativeDocumentMoniker": "Pages\\Auth.aspx",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Pages\\Auth.aspx",
-              "RelativeToolTip": "Pages\\Auth.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-09-28T12:39:37.933Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Web.config",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Web.config",
-              "RelativeDocumentMoniker": "Web.config",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Web.config",
-              "RelativeToolTip": "Web.config",
-              "ViewState": "AQIAAAAAAAAAAAAAAADwvwkAAAAPAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2024-09-28T12:31:22.229Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Global.asax.cs",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Global.asax.cs",
-              "RelativeDocumentMoniker": "Global.asax.cs",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Global.asax.cs",
-              "RelativeToolTip": "Global.asax.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAwwBMAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-28T12:30:31.854Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "readme.txt",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\packages\\Microsoft.AspNet.FriendlyUrls.1.0.2\\readme.txt",
-              "RelativeDocumentMoniker": "packages\\Microsoft.AspNet.FriendlyUrls.1.0.2\\readme.txt",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\packages\\Microsoft.AspNet.FriendlyUrls.1.0.2\\readme.txt",
-              "RelativeToolTip": "packages\\Microsoft.AspNet.FriendlyUrls.1.0.2\\readme.txt",
-              "ViewState": "AQIAAAAAAAAAAAAAAADwvwAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2024-09-28T12:30:28.572Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "HuakeWeb",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\HuakeWeb.csproj",
-              "RelativeDocumentMoniker": "HuakeWeb.csproj",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\HuakeWeb.csproj",
-              "RelativeToolTip": "HuakeWeb.csproj",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-09-28T12:24:34.786Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Site1.Master",
-              "DocumentMoniker": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Pages\\Master\\Site1.Master",
-              "RelativeDocumentMoniker": "Pages\\Master\\Site1.Master",
-              "ToolTip": "H:\\SouceCode\\AspSourceCode\\HuaKeWeb\\Pages\\Master\\Site1.Master",
-              "RelativeToolTip": "Pages\\Master\\Site1.Master",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2024-09-28T12:11:59.882Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }

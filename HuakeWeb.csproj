@@ -156,6 +156,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <None Include="packages.config" />
     <Content Include="Pages\Master\Site1.Master" />
     <Content Include="Site.Mobile.Master" />
