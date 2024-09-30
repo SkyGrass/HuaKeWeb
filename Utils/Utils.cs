@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Remoting.Contexts;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace HuakeWeb.Utils
@@ -46,7 +48,24 @@ namespace HuakeWeb.Utils
                     return false;
                 }
             }
+        }
 
+        public static async Task DownloadFileAsync(string downloadUrl, string filePath)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                // 发送HTTP GET请求获取文件内容  
+                HttpResponseMessage response = await client.GetAsync(downloadUrl);
+                response.EnsureSuccessStatusCode(); // 确保请求成功  
+
+                // 获取响应内容的流  
+                using (Stream contentStream = await response.Content.ReadAsStreamAsync())
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    // 将文件内容写入到本地文件  
+                    await contentStream.CopyToAsync(fileStream);
+                }
+            }
         }
     }
 }
