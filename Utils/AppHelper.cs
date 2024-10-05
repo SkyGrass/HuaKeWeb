@@ -23,6 +23,12 @@ namespace HuakeWeb
         private static string Id = ConfigurationManager.AppSettings["Id"] ?? "test";
         private static bool IsTest = Id.Equals("test");
         private Page curPage;
+        private HttpContext curContext;
+
+        public AppHelper(HttpContext context)
+        {
+            curContext = context;
+        }
         public AppHelper(Page page)
         {
             curPage = page;
@@ -49,6 +55,50 @@ namespace HuakeWeb
                 WriteLog(e.StackTrace);
             }
             return config != null && !string.IsNullOrEmpty(config.AppId) && !string.IsNullOrEmpty(config.AppSecret);
+        }
+
+        public bool GetWxTicket(out string ticket, out string errMsg)
+        {
+            Dictionary<string, string> res = new Dictionary<string, string>();
+            errMsg = ""; string errCode = ""; ticket = "";
+            try
+            {
+                ticket = GetCache("ticket", ref errMsg);
+                if (string.IsNullOrEmpty(ticket))
+                {
+                    string accessToken = GetCache("ticket_access", ref errMsg);
+                    if (string.IsNullOrEmpty(accessToken))
+                    {
+                        GetAccessToken("ticket_access", out errMsg);
+                    }
+                    accessToken = GetCache("ticket_access", ref errMsg);
+                    if (!string.IsNullOrEmpty(accessToken))
+                    {
+                        string resp = GetRequestApi("https://api.weixin.qq.com/cgi-bin/ticket/getticket", out errMsg, new Dictionary<string, string>() { { "access_token", accessToken }, { "type", "jsapi" } });
+                        if (!string.IsNullOrEmpty(resp))
+                        {
+                            res = JsonConvert.DeserializeObject<Dictionary<string, string>>(resp);
+                            if (res.ContainsKey("errcode"))
+                            {
+                                errCode = res["errcode"] ?? "1";
+                                if (errCode.Equals("0"))
+                                {
+                                    ticket = res["ticket"] ?? "";
+                                    int expires_in = int.Parse(res["expires_in"] ?? "0");
+                                    SetCache("ticket", ticket, expires_in, ref errMsg);
+                                }
+                                errMsg = res["errmsg"];
+                            }
+                        }
+                    }
+                }
+                else return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return errCode.Equals("0");
         }
 
         public bool SetCache(string type, string cache_content, int expires_in, ref string err_msg)
@@ -123,6 +173,7 @@ namespace HuakeWeb
                 }
 
                 string resp = GetRequestApi("https://api.weixin.qq.com/sns/oauth2/access_token", out errMsg, form);
+                WriteLog(resp);
                 if (!string.IsNullOrEmpty(resp))
                 {
                     res = JsonConvert.DeserializeObject<Dictionary<string, string>>(resp);
@@ -141,9 +192,42 @@ namespace HuakeWeb
             return string.IsNullOrEmpty(errMsg);
         }
 
+        public bool GetAccessToken(string type, out string errMsg)
+        {
+            errMsg = "";
+            if (ZYSoft.DB.BLL.Common.Exist(string.Format(@"SELECT 1 FROM ZYSoftConfig WHERE Id ='{0}'", Id)))
+            {
+                Dictionary<string, string> form = new Dictionary<string, string>();
+                DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(@"SELECT AppId,AppSecret FROM dbo.ZYSoftConfig WHERE Id ='{0}'", Id));
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    form.Add("grant_type", "client_credential");
+                    form.Add("appid", dt.Rows[0]["AppId"].ToString());
+                    form.Add("secret", dt.Rows[0]["AppSecret"].ToString());
+                }
+
+                string resp = GetRequestApi("https://api.weixin.qq.com/cgi-bin/token", out errMsg, form);
+                WriteLog(resp);
+                if (!string.IsNullOrEmpty(resp))
+                {
+                    Dictionary<string, string> res = JsonConvert.DeserializeObject<Dictionary<string, string>>(resp);
+                    if (res.ContainsKey("access_token"))
+                    {
+                        string access_token = res["access_token"] ?? "";
+                        int expires_in = int.Parse(res["expires_in"] ?? "0");
+                        SetCache(type, access_token, expires_in, ref errMsg);
+                    }
+                    else
+                    {
+                        errMsg = res["errmsg"];
+                    }
+                }
+            }
+            return string.IsNullOrEmpty(errMsg);
+        }
+
         public bool PushMsg(int tid, string touser, string content, string query, ref string errMsg)
         {
-            tid *= IsTest ? -1 : 1;
             string AccessToken = GetCache("bus", ref errMsg);
             string resp;
             Dictionary<string, string> res;
@@ -159,8 +243,8 @@ namespace HuakeWeb
                         { "appid", config.Rows[0]["AppId"].ToString() },
                         { "secret", config.Rows[0]["AppSecret"].ToString() }
                     };
-
                     resp = GetRequestApi("https://api.weixin.qq.com/cgi-bin/token", out errMsg, form);
+                    WriteLog("发送微信消息获取AccessToken返回：" + resp);
                     if (!string.IsNullOrEmpty(resp))
                     {
                         res = JsonConvert.DeserializeObject<Dictionary<string, string>>(resp);
@@ -209,19 +293,20 @@ namespace HuakeWeb
                     qbody.Add(new JProperty(item, new JObject { new JProperty("value", valus.Length > i ? valus[i] : "") }));
                 }
                 body.Add("data", qbody);
+                WriteLog("发送微信消息参数：" + JsonConvert.SerializeObject(body));
                 resp = HttpPost(string.Format(@"https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={0}",
                     AccessToken), JsonConvert.SerializeObject(body));
-
+                WriteLog("发送微信消息返回：" + resp);
                 if (!string.IsNullOrEmpty(resp))
                 {
                     res = JsonConvert.DeserializeObject<Dictionary<string, string>>(resp);
                     if (res.ContainsKey("errcode") && res["errcode"].Equals("0"))
                     {
-                        errMsg = res["errmsg"];
                         return true;
                     }
                     else
                     {
+                        errMsg = res["errmsg"];
                         return false;
                     }
                 }
@@ -353,11 +438,59 @@ namespace HuakeWeb
             }
         }
 
+        public Dictionary<string, string> GenerateSignature(string appId, string jsapiTicket, string url)
+        {
+            string nonceStr = Utils.Utils.GetRandomString();
+            Dictionary<string, string> configs = new Dictionary<string, string>() {
+                { "appId",appId},
+                { "nonceStr",nonceStr}
+            };
+
+            long timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+            configs.Add("timestamp", timestamp.ToString());
+            // 参数字典，用于排序  
+            var parameters = new SortedDictionary<string, string> {
+            { "jsapi_ticket", jsapiTicket },
+            { "noncestr", nonceStr },
+            { "timestamp", timestamp.ToString() },
+            { "url", url }};
+
+            // 拼接字符串  
+            var stringBuilder = new StringBuilder();
+            foreach (var param in parameters)
+            {
+                stringBuilder.Append(param.Key).Append("=").Append(param.Value).Append("&");
+            }
+
+            // 去掉最后一个 '&'  
+            var stringToSign = stringBuilder.ToString(0, stringBuilder.Length - 1);
+
+            // 进行 SHA1 加密  
+            using (SHA1 sha1 = SHA1.Create())
+            {
+                var bytesToSign = Encoding.UTF8.GetBytes(stringToSign);
+                var hashBytes = sha1.ComputeHash(bytesToSign);
+
+                // 转换为十六进制字符串  
+                var signature = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+                configs.Add("signature", signature);
+            }
+            return configs;
+        }
+
         public void WriteLog(string content)
         {
             try
             {
-                string tracingFile = curPage.Server.MapPath("~/logs");
+                string tracingFile = "";
+                if (curPage != null)
+                {
+                    tracingFile = curPage.Server.MapPath("~/logs");
+                }
+                if (curContext != null)
+                {
+                    tracingFile = curContext.Server.MapPath("~/logs");
+                }
                 if (!Directory.Exists(tracingFile))
                     Directory.CreateDirectory(tracingFile);
                 string fileName = DateTime.Now.ToString("yyyyMMdd") + ".txt";

@@ -1,10 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using HuakeWeb.Expections;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.Remoting.Contexts;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -48,6 +53,49 @@ namespace HuakeWeb.Utils
                     return false;
                 }
             }
+        }
+
+        public static string SHA256Encryptor(string message)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(message);
+            byte[] hash = SHA256.Create().ComputeHash(bytes);
+
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                builder.Append(hash[i].ToString("x2"));
+            }
+            return builder.ToString();
+        }
+
+        public static string GetCookie(HttpRequest request, string key, string defaultValue)
+        {
+            try
+            {
+                return SafeConvert.SafeString(request.Cookies[key].Value, "");
+            }
+            catch
+            {
+                return defaultValue;
+            }
+        }
+
+        public static string GetUserCodeBySession(HttpContext content)
+        {
+            try
+            {
+                string session = GetCookie(content.Request, "session", "");
+                DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_USER_INFO, session));
+                if (null != dt && dt.Rows.Count > 0)
+                {
+                    return SafeConvert.SafeString(dt.Rows[0]["UserCode"], "");
+                }
+            }
+            catch (NoLoginException e)
+            {
+                content.Response.Write("<script>alert('您的登录已失效')</script>");
+            }
+            return "";
         }
 
         public static async Task DownloadFileAsync(string downloadUrl, string filePath)

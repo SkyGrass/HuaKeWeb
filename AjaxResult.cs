@@ -28,6 +28,9 @@ namespace HuakeWeb
             JsonConvert.SerializeObject(new AjaxResult("success", msg));
         public static string fail(string msg) =>
             JsonConvert.SerializeObject(new AjaxResult("error", msg));
+        public static string expired() =>
+           JsonConvert.SerializeObject(new AjaxResult("expired", "您尚未登录或登录已过期"));
+
         public static string success(string msg, object data) =>
             JsonConvert.SerializeObject(new AjaxResult("success", msg, data));
 

@@ -21,33 +21,16 @@ namespace HuakeWeb.Pages
         {
             if (!Page.IsPostBack)
             {
+                new AppHelper(this).WriteLog(Request.QueryString.ToString());
                 string code = Request.QueryString["code"] ?? "";
-                string session = SafeConvert.SafeString(Request.Cookies.Get("session")?.Value, "");
-                if (string.IsNullOrEmpty(code))
+                string session = Utils.Utils.GetCookie(Request, "session", "");
+                if (ZYSoft.DB.BLL.Common.Exist(string.Format(Const.SQL_USER_INFO, session)))
                 {
-                    if (!string.IsNullOrEmpty(session))
-                    {
-                        DataTable userSession = null;
-                        try
-                        {
-                            userSession = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_QUERY_USER_SESSION, session));
-                        }
-                        catch (Exception)
-                        {
-                            Global.errMsg = "检查用户授权发生异常";
-                            Response.Redirect(string.Format(@"sysError"), true);
-                        }
-                        if (userSession == null || userSession.Rows.Count <= 0)
-                        {
-                            Global.errMsg = "用户未授权或授权过期,请重新发起";
-                            Response.Redirect(string.Format(@"sysError"), true);
-                        }
-                        else
-                        {
-                            Response.Redirect("home", true);
-                        }
-                    }
-                    else
+                    Response.Redirect("home", false);
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(code))
                     {
                         try
                         {
@@ -56,39 +39,41 @@ namespace HuakeWeb.Pages
                                 if (string.IsNullOrEmpty(config.RedirectUrl))
                                     config.RedirectUrl = Request.Url.AbsoluteUri;
                                 string url = string.Format(@"https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type=code&scope=snsapi_base&state={2}#wechat_redirect", config.AppId, HttpUtility.HtmlEncode(config.RedirectUrl), Utils.Utils.GetRandomString());
-                                Response.Redirect(url, true);
+                                Response.Redirect(url, false);
                             }
                             else
                             {
-                                Response.Redirect(string.Format(@"sysError?reason={0}", HttpUtility.UrlEncode(errMsg)), true);
+                                Global.errMsg = errMsg;
+                                Response.Redirect("sysError", false);
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             Global.errMsg = "查询系统授权参数发生异常\r\n请检查系统配置";
                             Response.Redirect(string.Format(@"sysError"), true);
                         }
                     }
-                }
-                else
-                {
-                    Dictionary<string, string> res = new Dictionary<string, string>();
-                    if (new AppHelper(this).GetAuthInfo(code, ref res, out errMsg))
+                    else
                     {
-                        string openId = res["openid"] ?? "";
-                        if (!string.IsNullOrEmpty(openId))
+                        Dictionary<string, string> res = new Dictionary<string, string>();
+                        if (new AppHelper(this).GetAuthInfo(code, ref res, out errMsg))
                         {
-                            Response.Redirect(string.Format(@"bind?openId={0}", openId)); //redirect auth
+                            string openId = res["openid"] ?? "";
+                            if (!string.IsNullOrEmpty(openId))
+                            {
+                                Response.Redirect(string.Format(@"bind?openId={0}", openId)); //redirect auth
+                            }
+                            else
+                            {
+                                Global.errMsg = "系统似乎开小差了,请关闭后打开!";
+                                Response.Redirect("sysError", true);
+                            }
                         }
                         else
                         {
-                            Global.errMsg = "系统似乎开小差了,请关闭后打开!";
-                            Response.Redirect(string.Format(@"sysError"), true);
+                            Global.errMsg = errMsg;
+                            Response.Redirect("sysError", false);
                         }
-                    }
-                    else
-                    {
-                        Response.Redirect(string.Format(@"sysError?reason={0}", HttpUtility.HtmlEncode(errMsg)), true);
                     }
                 }
             }

@@ -253,7 +253,27 @@ namespace HuakeWeb.Utils
             }
             return defaultValue;
         }
+
         #endregion
+
+        public static T SafeDictionry<T>(Dictionary<string, T> dic, string key, T defaultValue)
+        {
+            try
+            {
+                if (dic.Keys.Contains(key))
+                {
+                    return dic[key];
+                }
+                else
+                {
+                    return defaultValue;
+                }
+            }
+            catch (Exception)
+            {
+                return defaultValue;
+            }
+        }
 
         #endregion
     }

@@ -269,3 +269,4 @@ bin/
 obj/
 package/
 logs/
+/Web.config

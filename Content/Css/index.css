@@ -2487,7 +2487,7 @@ ol, ul {
     padding: 10px 16px;
     overflow: hidden;
     color: #323233;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 24px;
     background-color: #fff
 }
@@ -2512,7 +2512,7 @@ ol, ul {
 .van-cell__label {
     margin-top: 4px;
     color: #969799;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 18px
 }
 
@@ -5688,7 +5688,7 @@ ol, ul {
 .van-cell-group__title {
     padding: 16px 16px 8px;
     color: #969799;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 16px
 }
 
@@ -6391,8 +6391,8 @@ ol, ul {
     -webkit-justify-content: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     margin: 0 8px 8px 0;
     background-color: #f7f8fa
 }
@@ -6424,8 +6424,8 @@ ol, ul {
 
 .van-uploader__preview-image {
     display: block;
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     overflow: hidden
 }
 

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNet.FriendlyUrls;
+﻿using HuakeWeb.Utils;
+using Microsoft.AspNet.FriendlyUrls;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using System.Web.Routing;
 using System.Web.Security;
@@ -15,38 +18,34 @@ namespace HuakeWeb
     public class Global : System.Web.HttpApplication
     {
         public static string errMsg = "";
+        public static string configs = "";
+        public static List<string> whiteActions = new List<string>() { "bind", "send-msg", "query-vendor" };
         protected void Application_Start(object sender, EventArgs e)
         {
             string connection = ConfigurationManager.AppSettings["conn"] ?? "";
             ZYSoft.DB.BLL.Common.SetConnString(connection);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
-        protected void Application_OnError(object sender, EventArgs e)
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            try
+            HttpRequest request = ((HttpApplication)sender).Request;
+            string path = request.Path;
+            if (path.EndsWith("ashx"))
             {
-                string tracingFile = Server.MapPath("~/logs");
-                if (!Directory.Exists(tracingFile))
-                    Directory.CreateDirectory(tracingFile);
-                string fileName = DateTime.Now.ToString("yyyyMMdd") + ".txt";
-                tracingFile = Path.Combine(tracingFile, fileName);
-                if (tracingFile != string.Empty)
+                string action = request.QueryString["action"];
+                if (!whiteActions.Contains(action))
                 {
-                    FileInfo file = new FileInfo(tracingFile);
-                    using (StreamWriter debugWriter = new StreamWriter(file.Open(FileMode.Append, FileAccess.Write, FileShare.ReadWrite)))
+                    string session = Utils.Utils.GetCookie(request, "session", "");
+                    if (string.IsNullOrEmpty(session) || !ZYSoft.DB.BLL.Common.Exist(string.Format(Const.SQL_USER_INFO, session)))
                     {
-                        debugWriter.WriteLine(DateTime.Now.ToString());
-                        debugWriter.WriteLine(((HttpApplication)sender).Context.Error.Message);
-                        debugWriter.WriteLine(((HttpApplication)sender).Context.Error.StackTrace);
-                        debugWriter.WriteLine();
-                        debugWriter.Flush();
-                        debugWriter.Close();
+                        Response.ContentType = "application/json";
+                        Response.AddHeader("Content-Type", "application/json;charset=UTF-8");
+                        Response.Charset = "UTF-8";
+                        Response.Write(AjaxResult.expired());
+                        Response.End();
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-
             }
         }
 
