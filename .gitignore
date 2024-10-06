@@ -270,3 +270,4 @@ obj/
 package/
 logs/
 /Web.config
+/upload

@@ -30,6 +30,7 @@
                         </template>
                         <template slot="label">
                             <div>【日期】{{item.dDate |formatDate}}</div>
+                            <div>【地址】{{item.cAddress}}</div>
                             <div>【运费】￥{{item.iYFMoney_End}}</div>
                         </template>
                     </van-cell>

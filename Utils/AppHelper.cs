@@ -22,18 +22,8 @@ namespace HuakeWeb
     {
         private static string Id = ConfigurationManager.AppSettings["Id"] ?? "test";
         private static bool IsTest = Id.Equals("test");
-        private Page curPage;
-        private HttpContext curContext;
 
-        public AppHelper(HttpContext context)
-        {
-            curContext = context;
-        }
-        public AppHelper(Page page)
-        {
-            curPage = page;
-        }
-        public bool GetWxConfig(out ZYSoftConfig config, out string errMsg)
+        public static bool GetWxConfig(out ZYSoftConfig config, out string errMsg)
         {
             errMsg = "";
             config = new ZYSoftConfig();
@@ -57,7 +47,7 @@ namespace HuakeWeb
             return config != null && !string.IsNullOrEmpty(config.AppId) && !string.IsNullOrEmpty(config.AppSecret);
         }
 
-        public bool GetWxTicket(out string ticket, out string errMsg)
+        public static bool GetWxTicket(out string ticket, out string errMsg)
         {
             Dictionary<string, string> res = new Dictionary<string, string>();
             errMsg = ""; string errCode = ""; ticket = "";
@@ -101,7 +91,7 @@ namespace HuakeWeb
             return errCode.Equals("0");
         }
 
-        public bool SetCache(string type, string cache_content, int expires_in, ref string err_msg)
+        public static bool SetCache(string type, string cache_content, int expires_in, ref string err_msg)
         {
             bool result = false;
             try
@@ -137,7 +127,7 @@ namespace HuakeWeb
             return result;
         }
 
-        public string GetCache(string type, ref string err_msg)
+        private static string GetCache(string type, ref string err_msg)
         {
             string cache_content = "";
             try
@@ -156,7 +146,7 @@ namespace HuakeWeb
             return cache_content;
         }
 
-        public bool GetAuthInfo(string code, ref Dictionary<string, string> res, out string errMsg)
+        public static bool GetAuthInfo(string code, ref Dictionary<string, string> res, out string errMsg)
         {
             errMsg = "";
             res = new Dictionary<string, string>();
@@ -192,7 +182,7 @@ namespace HuakeWeb
             return string.IsNullOrEmpty(errMsg);
         }
 
-        public bool GetAccessToken(string type, out string errMsg)
+        private static bool GetAccessToken(string type, out string errMsg)
         {
             errMsg = "";
             if (ZYSoft.DB.BLL.Common.Exist(string.Format(@"SELECT 1 FROM ZYSoftConfig WHERE Id ='{0}'", Id)))
@@ -226,7 +216,7 @@ namespace HuakeWeb
             return string.IsNullOrEmpty(errMsg);
         }
 
-        public bool PushMsg(int tid, string touser, string content, string query, ref string errMsg)
+        public static bool PushMsg(int tid, string touser, string content, string query, ref string errMsg)
         {
             string AccessToken = GetCache("bus", ref errMsg);
             string resp;
@@ -322,35 +312,7 @@ namespace HuakeWeb
             }
         }
 
-        public bool GetUserInfoFromDb(string openId, ref Dictionary<string, string> res, ref string errMsg)
-        {
-            res = new Dictionary<string, string>();
-            try
-            {
-                DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(@"
-                SELECT  t2.[Guid] UserId,ISNULL(t2.DisplayName,'')DisplayName,ISNULL(t3.PersonId,'')PersonId
-                FROM dbo.ZYSoftUserWcMapping t1 
-                 LEFT JOIN
-                 dbo.DncUser t2 ON t1.UserGuid = t2.[Guid] 
-                 LEFT JOIN
-                 dbo.ZYSoftUserPersonalMapping t3 ON t1.UserGuid = t2.[Guid] WHERE OpenId ='{0}'", openId));
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    //有账号，且已经关联到openId
-                    res.Add("UserId", dt.Rows[0]["UserId"].ToString());
-                    res.Add("DisplayName", dt.Rows[0]["DisplayName"].ToString());
-                    res.Add("PersonId", dt.Rows[0]["PersonId"].ToString());
-                }
-                return dt != null && dt.Rows.Count > 0;
-            }
-            catch (Exception e)
-            {
-                errMsg = e.Message;
-                return false;
-            }
-        }
-
-        public string GetRequestApi(string url, out string errMsg, Dictionary<string, string> dic = null)
+        private static string GetRequestApi(string url, out string errMsg, Dictionary<string, string> dic = null)
         {
             errMsg = "";
             string resp = "";
@@ -382,7 +344,7 @@ namespace HuakeWeb
             return resp;
         }
 
-        public string PostRequestApi(string url, ref string errMsg, Dictionary<string, string> dic = null)
+        private static string PostRequestApi(string url, ref string errMsg, Dictionary<string, string> dic = null)
         {
             string resp = "";
             try
@@ -404,7 +366,7 @@ namespace HuakeWeb
             return resp;
         }
 
-        public string HttpPost(string url, string data)
+        private static string HttpPost(string url, string data)
         {
             try
             {
@@ -438,7 +400,7 @@ namespace HuakeWeb
             }
         }
 
-        public Dictionary<string, string> GenerateSignature(string appId, string jsapiTicket, string url)
+        private Dictionary<string, string> GenerateSignature(string appId, string jsapiTicket, string url)
         {
             string nonceStr = Utils.Utils.GetRandomString();
             Dictionary<string, string> configs = new Dictionary<string, string>() {
@@ -478,19 +440,11 @@ namespace HuakeWeb
             return configs;
         }
 
-        public void WriteLog(string content)
+        public static void WriteLog(string content)
         {
             try
             {
-                string tracingFile = "";
-                if (curPage != null)
-                {
-                    tracingFile = curPage.Server.MapPath("~/logs");
-                }
-                if (curContext != null)
-                {
-                    tracingFile = curContext.Server.MapPath("~/logs");
-                }
+                string tracingFile = HttpContext.Current.Server.MapPath("~/logs");
                 if (!Directory.Exists(tracingFile))
                     Directory.CreateDirectory(tracingFile);
                 string fileName = DateTime.Now.ToString("yyyyMMdd") + ".txt";

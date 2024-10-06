@@ -21,7 +21,7 @@ namespace HuakeWeb.Pages
         {
             if (!Page.IsPostBack)
             {
-                new AppHelper(this).WriteLog(Request.QueryString.ToString());
+                AppHelper.WriteLog(Request.QueryString.ToString());
                 string code = Request.QueryString["code"] ?? "";
                 string session = Utils.Utils.GetCookie(Request, "session", "");
                 if (ZYSoft.DB.BLL.Common.Exist(string.Format(Const.SQL_USER_INFO, session)))
@@ -34,7 +34,7 @@ namespace HuakeWeb.Pages
                     {
                         try
                         {
-                            if (new AppHelper(this).GetWxConfig(out config, out errMsg))
+                            if (AppHelper.GetWxConfig(out config, out errMsg))
                             {
                                 if (string.IsNullOrEmpty(config.RedirectUrl))
                                     config.RedirectUrl = Request.Url.AbsoluteUri;
@@ -56,7 +56,7 @@ namespace HuakeWeb.Pages
                     else
                     {
                         Dictionary<string, string> res = new Dictionary<string, string>();
-                        if (new AppHelper(this).GetAuthInfo(code, ref res, out errMsg))
+                        if (AppHelper.GetAuthInfo(code, ref res, out errMsg))
                         {
                             string openId = res["openid"] ?? "";
                             if (!string.IsNullOrEmpty(openId))
