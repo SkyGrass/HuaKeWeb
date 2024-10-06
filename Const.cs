@@ -24,10 +24,13 @@ namespace HuakeWeb
             cCusName,cAddress,iQuantity, iNum ,ISNULL(T2.iUploadNum,0)iUploadNum FROM [dbo].[Z_CZHK_WLGL_Vouchs] T1
             LEFT JOIN (SELECT COUNT(1)AS iUploadNum,iIDs FROM Z_CZHK_WLGL_Vouchs_Picture GROUP BY iIDs) T2 
             ON T1.AutoID =T2.iIDs WHERE ID = '{0}'";
+        public const string SQL_UPDATE_RECORD = @"UPDATE [dbo].[Z_CZHK_WLGL_Vouch] SET dCardInDate = '{1}',cCardNo = '{2}',cCardUser = '{3}' ,
+            cCardUserPhone = '{3}' WHERE ID ='{0}'";
         public const string SQL_CLEAR_RECORD = @"UPDATE [dbo].[Z_CZHK_WLGL_Vouch] SET dCardInDate = '',cCardNo = '',cCardUser = '' ,
             cCardUserPhone = '',cSendCode ='' WHERE ID ='{0}'";
         public const string SQL_CLEAR_IMG = @"DELETE FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE iIDs='{0}'";
         public const string SQL_UPDATE_RECORD_ITEM = @"UPDATE [dbo].[Z_CZHK_WLGL_Vouch] SET {0} WHERE iState IN (1,2) AND ID ='{1}'";
+        public const string SQL_UPDATE_RECORD_STATE = @"UPDATE [dbo].[Z_CZHK_WLGL_Vouch] SET iState=2 WHERE iState IN (1,2) AND ID ='{1}' AND dCardInDate <> '' AND ISNULL(cCardNo,'') <> '' AND ISNULL(cCardUser,'') <> '' AND ISNULL(cCardUserPhone,'') <> '' AND ISNULL(cSendCode,'') <>''";
         public const string SQL_QUERY_IMG = @"select  * from Z_CZHK_WLGL_Vouchs_Picture WHERE iIDs ='{0}'";
         public const string SQL_SELECT_IMG_BY_ID = @"SELECT * FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE AutoID='{0}'";
         public const string SQL_DELETE_IMG = @"DELETE FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE AutoID='{0}'";

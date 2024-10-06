@@ -157,6 +157,28 @@ namespace HuakeWeb.Handle
                         context.Response.Write(AjaxResult.fail(errMsg));
                     }
                     break;
+                case "update-record":
+                    if (Utils.Utils.ReadStrem2Dic(context.Request.InputStream, out dic, out errMsg))
+                    {
+                        string id = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "id", ""), "");
+                        string dCardInDate = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "dCardInDate", ""), "");
+                        string cCardNo = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "cCardNo", ""), "");
+                        string cCardUser = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "cCardUser", ""), "");
+                        string cCardUserPhone = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "cCardUserPhone", ""), "");
+                        if (ZYSoft.DB.BLL.Common.ExecuteNonQuery(string.Format(Const.SQL_UPDATE_RECORD, id, dCardInDate, cCardNo, cCardUser, cCardUserPhone)) > 0)
+                        {
+                            context.Response.Write(AjaxResult.success("操作成功"));
+                        }
+                        else
+                        {
+                            context.Response.Write(AjaxResult.fail("操作失败"));
+                        }
+                    }
+                    else
+                    {
+                        context.Response.Write(AjaxResult.fail(errMsg));
+                    }
+                    break;
                 case "save-item":
                     if (Utils.Utils.ReadStrem2Dic(context.Request.InputStream, out dic, out errMsg))
                     {
