@@ -101,9 +101,10 @@ namespace HuakeWeb.Handle
                     {
                         string code = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "code", ""), "");
                         string name = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "name", ""), "");
-                        if (ZYSoft.DB.BLL.Common.Exist(string.Format(Const.SQL_VERFIY_VENDOR, code, name)))
+                        string phone = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "phone", ""), "");
+                        if (ZYSoft.DB.BLL.Common.Exist(string.Format(Const.SQL_VERFIY_VENDOR, code, name, phone)))
                         {
-                            context.Response.Write(AjaxResult.success(""));
+                            context.Response.Write(AjaxResult.success("操作成功"));
                         }
                         else
                         {
@@ -165,7 +166,8 @@ namespace HuakeWeb.Handle
                         string cCardNo = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "cCardNo", ""), "");
                         string cCardUser = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "cCardUser", ""), "");
                         string cCardUserPhone = SafeConvert.SafeString(SafeConvert.SafeDictionry(dic, "cCardUserPhone", ""), "");
-                        if (ZYSoft.DB.BLL.Common.ExecuteNonQuery(string.Format(Const.SQL_UPDATE_RECORD, id, dCardInDate, cCardNo, cCardUser, cCardUserPhone)) > 0)
+                        if (ZYSoft.DB.BLL.Common.ExecuteNonQuery(string.Format(Const.SQL_UPDATE_RECORD, id, dCardInDate,
+                            cCardNo, cCardUser, cCardUserPhone)) > 0)
                         {
                             context.Response.Write(AjaxResult.success("操作成功"));
                         }
@@ -221,23 +223,23 @@ namespace HuakeWeb.Handle
                 case "save-img":
                     try
                     {
+                        string basePath = System.Configuration.ConfigurationManager.AppSettings["saveDisk"] ?? context.Server.MapPath("~/upload");
                         HttpPostedFile file = context.Request.Files["file"];
                         string rowId = SafeConvert.SafeString(context.Request.Form["rowId"], ""); //单据id
                         string mediaId = SafeConvert.SafeString(context.Request.Form["mediaId"], "");
                         string fileType = "." + (SafeConvert.SafeString(context.Request.Form["fileType"], "png").Split('/')).LastOrDefault();
-                        string path = context.Server.MapPath("~/upload");
-                        path = Path.Combine(path, rowId);
-                        if (!Directory.Exists(path))
+                        string filePath = Path.Combine(basePath, rowId);
+                        if (!Directory.Exists(filePath))
                         {
-                            Directory.CreateDirectory(path);
+                            Directory.CreateDirectory(filePath);
                         }
-                        path = Path.Combine(path, Utils.Utils.GetRandomString(10, useSpe: false) + fileType);
-                        file.SaveAs(path);
-                        path = path.Replace(context.Server.MapPath("~"), "");
-                        string autoId = ZYSoft.DB.BLL.Common.ExecuteScalar(string.Format(Const.SQL_SAVE_IMG, rowId, path));
+                        filePath = Path.Combine(filePath, Utils.Utils.GetRandomString(10, useSpe: false) + fileType);
+                        file.SaveAs(filePath);
+                        string dataPath = filePath.Replace(basePath, "");
+                        string autoId = ZYSoft.DB.BLL.Common.ExecuteScalar(string.Format(Const.SQL_SAVE_IMG, rowId, dataPath));
                         if (SafeConvert.SafeInt(autoId, 0) > -1)
                         {
-                            context.Response.Write(AjaxResult.success("操作成功", new { autoId, path }));
+                            context.Response.Write(AjaxResult.success("操作成功", new { autoId, path = dataPath }));
                         }
                         else
                         {
@@ -252,6 +254,7 @@ namespace HuakeWeb.Handle
                 case "delete-img":
                     if (Utils.Utils.ReadStrem2Dic(context.Request.InputStream, out dic, out errMsg))
                     {
+                        string basePath = System.Configuration.ConfigurationManager.AppSettings["saveDisk"] ?? context.Server.MapPath("~/upload");
                         string id = SafeConvert.SafeString(dic["id"], "");
                         string filePath = "";
                         DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_SELECT_IMG_BY_ID, id));
@@ -265,7 +268,7 @@ namespace HuakeWeb.Handle
                             context.Response.Write(AjaxResult.success("操作成功"));
                             try
                             {
-                                filePath = Path.Combine(context.Server.MapPath("~"), filePath);
+                                filePath = basePath + filePath;
                                 if (File.Exists(filePath))
                                     File.Delete(filePath);
                             }
@@ -306,17 +309,17 @@ namespace HuakeWeb.Handle
                     }
                     else
                     {
-                        context.Response.Write(AjaxResult.success("发送失败，原因：" + errMsg));
+                        context.Response.Write(AjaxResult.fail("发送失败，原因：" + errMsg));
                     }
                 }
                 else
                 {
-                    context.Response.Write(AjaxResult.success("发送失败，原因：没有查询到供应商绑定记录"));
+                    context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到供应商绑定记录"));
                 }
             }
             else
             {
-                context.Response.Write(AjaxResult.success("发送失败，原因：没有查询到单据记录"));
+                context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到单据记录"));
             }
         }
 
@@ -345,7 +348,7 @@ namespace HuakeWeb.Handle
                             DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_QUERY_RECORD_DETAIL, bid));
                             if (dt != null && dt.Rows.Count > 0)
                             {
-                                string path = context.Server.MapPath("~/upload");
+                                string path = System.Configuration.ConfigurationManager.AppSettings["saveDisk"] ?? context.Server.MapPath("~/upload");
                                 foreach (DataRow dr in dt.Rows)
                                 {
                                     string ids = SafeConvert.SafeString(dr["AutoID"], "");
@@ -373,19 +376,19 @@ namespace HuakeWeb.Handle
                             }
                             else
                             {
-                                context.Response.Write(AjaxResult.success("发送失败，原因：清空记录未成功"));
+                                context.Response.Write(AjaxResult.fail("发送失败，原因：清空记录未成功"));
                             }
                         }
                         else
                         {
-                            context.Response.Write(AjaxResult.success("发送失败，原因：" + errMsg));
+                            context.Response.Write(AjaxResult.fail("发送失败，原因：" + errMsg));
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                context.Response.Write(AjaxResult.success("发送失败，原因：" + ex.Message));
+                context.Response.Write(AjaxResult.fail("发送失败，原因：" + ex.Message));
             }
         }
         public bool IsReusable

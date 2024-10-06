@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/Master/Site1.Master" AutoEventWireup="true" CodeBehind="Bind.aspx.cs" Inherits="HuakeWeb.Pages.Bind" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <title>用户绑定</title>
     <style>
         #bind {
             width: 100vw;
@@ -39,6 +40,14 @@
                     placeholder="请填写供应商名称" clearable
                     v-bind:rules="[{ required: true, message: '请填写供应商名称' }]">
                 </van-field>
+                <van-field
+                    v-model="form.phone"
+                    name="phone"
+                    left-icon="phone-o"
+                    label="联系电话"
+                    placeholder="请填写供应商联系电话" clearable
+                    v-bind:rules="[{ required: true, message: '请填写供应商联系电话' }]">
+                </van-field>
                 <div style="margin: 16px;">
                     <van-button style="border-radius: 10px" block type="info" native-type="submit">查询</van-button>
                 </div>
@@ -53,8 +62,9 @@
                 return {
                     isBind:"<%=IsBind%>",
                     form: {
-                        code: '03000032',
-                        name: '常州嘉奕运输有限公司',
+                        code: '',
+                        name: '',
+                        phone: '',
                     },
                     querys: {},
                 };
