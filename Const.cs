@@ -6,7 +6,7 @@ using System.Web;
 namespace HuakeWeb
 {
     public class Const
-    { 
+    {
         public const string SQL_SELECT_VENDOR_BY_OPENID = @"SELECT cVenCode,cVenName,cVenHand FROM Vendor WHERE isnull(cVenDefine8,'') = '{0}'";
         public const string SQL_VERFIY_VENDOR = @"SELECT cVenCode,cVenName,cVenHand FROM Vendor WHERE cVenCode = '{0}' and cVenName = '{1}'  and cVenHand='{2}' and isnull(cVenDefine8,'') = ''";
         public const string SQL_SELECT_VENDOR_OPENID = @"SELECT isnull(cVenDefine8,'')OpenId FROM Vendor WHERE cVenCode = '{0}'";
@@ -36,8 +36,8 @@ namespace HuakeWeb
         public const string SQL_SELECT_MSG_CONTENT = @"SELECT T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End ,T3.cAddress,SUM(T3.iNum) AS iNum  from [dbo].[Z_CZHK_WLGL_Vouch] T1 
                             LEFT JOIN Vendor T2  ON t1.cVenCode = t2.cVenCode 
                             LEFT JOIN  [dbo].[Z_CZHK_WLGL_Vouchs] T3
-                            ON T1.ID = t3.ID WHERE T1.ID = '{0}' GROUP BY  T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End,t3.cAddress
-
-";
+                            ON T1.ID = t3.ID WHERE T1.ID = '{0}' GROUP BY  T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End,t3.cAddress";
+        public const string SQL_SELECT_CANCEL_MSG_CONTENT = @"SELECT DISTINCT cCode,cVenCode,T2.cAddress,ISNULL(cCardNo,'')+ISNULL(cCardUser,'')cCardUser,'单据变更,请重新确认'cCancelReason
+FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE T1.ID ='{0}'";
     }
 }

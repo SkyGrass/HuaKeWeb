@@ -329,11 +329,11 @@ namespace HuakeWeb.Handle
             try
             {
                 string bid = SafeConvert.SafeString(context.Request.QueryString["id"], "");
-                DataTable dtRecord = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_SELECT_MSG_CONTENT, bid));
+                DataTable dtRecord = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_SELECT_CANCEL_MSG_CONTENT, bid));
                 if (dtRecord != null && dtRecord.Rows.Count > 0)
                 {
-                    string content = string.Format(@"{0}|{1}|{2}|{3}|{4}", dtRecord.Rows[0]["cCode"], dtRecord.Rows[0]["cVenName"],
-                        dtRecord.Rows[0]["cAddress"], SafeConvert.SafeDecimal(dtRecord.Rows[0]["iNum"], 0).ToString("F0"), SafeConvert.SafeDecimal(dtRecord.Rows[0]["iYFMoney_End"], 0).ToString("F2"));
+                    string content = string.Format(@"{0}|{1}|{2}|{3}", dtRecord.Rows[0]["cCode"],
+                     dtRecord.Rows[0]["cAddress"], dtRecord.Rows[0]["cCardUser"], dtRecord.Rows[0]["cCancelReason"]);
                     string vendorCode = SafeConvert.SafeString(dtRecord.Rows[0]["cVenCode"], "");
                     string userOpenId = ZYSoft.DB.BLL.Common.ExecuteScalar(string.Format(Const.SQL_SELECT_VENDOR_OPENID, vendorCode));
                     if (!string.IsNullOrEmpty(userOpenId))
@@ -383,6 +383,10 @@ namespace HuakeWeb.Handle
                         {
                             context.Response.Write(AjaxResult.fail("发送失败，原因：" + errMsg));
                         }
+                    }
+                    else
+                    {
+                        context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到供应商绑定记录"));
                     }
                 }
             }
