@@ -90,7 +90,7 @@ namespace HuakeWeb
             return errCode.Equals("0");
         }
 
-        public static bool SetCache(string type, string cache_content, int expires_in, ref string err_msg)
+        private static bool SetCache(string type, string cache_content, int expires_in, ref string err_msg)
         {
             bool result = false;
             try
