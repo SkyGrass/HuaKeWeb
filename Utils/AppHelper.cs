@@ -20,8 +20,7 @@ namespace HuakeWeb
 {
     public class AppHelper
     {
-        private static string Id = ConfigurationManager.AppSettings["Id"] ?? "test";
-        private static bool IsTest = Id.Equals("test");
+        private static string Id = ConfigurationManager.AppSettings["Id"] ?? "test"; 
 
         public static bool GetWxConfig(out ZYSoftConfig config, out string errMsg)
         {
