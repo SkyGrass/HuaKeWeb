@@ -47,7 +47,9 @@
                 const { msg, state } = response.data
                 vm.$toast.clear();
                 if (state == 'expired') {
-                    vm.$dialog.alert({ title: '提示', message: msg });
+                    vm.$dialog.confirm({ title: '提示', message: msg, confirmText: "重新登录" }).then(res => {
+                        location.href="auth"
+                    }).catch(e => { });
                 } else {
                     return response.data;
                 }

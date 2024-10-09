@@ -20,6 +20,7 @@ namespace HuakeWeb.Handle
         {
             context.Response.ContentType = "application/json;utf-8";
             string action = (context.Request.QueryString["action"] ?? "").ToLower();
+            AppHelper.WriteLog("Handler==>" + context.Request.QueryString.ToString());
             string errMsg = ""; Dictionary<string, object> dic;
             switch (action)
             {
@@ -333,7 +334,9 @@ namespace HuakeWeb.Handle
                 if (dtRecord != null && dtRecord.Rows.Count > 0)
                 {
                     string content = string.Format(@"{0}|{1}|{2}|{3}", dtRecord.Rows[0]["cCode"],
-                     dtRecord.Rows[0]["cAddress"], dtRecord.Rows[0]["cCardUser"], dtRecord.Rows[0]["cCancelReason"]);
+                     dtRecord.Rows[0]["cAddress"],
+                     string.IsNullOrEmpty(SafeConvert.SafeString(dtRecord.Rows[0]["cCardUser"], "")) ? "无" :
+                     dtRecord.Rows[0]["cCardUser"], dtRecord.Rows[0]["cCancelReason"]);
                     string vendorCode = SafeConvert.SafeString(dtRecord.Rows[0]["cVenCode"], "");
                     string userOpenId = ZYSoft.DB.BLL.Common.ExecuteScalar(string.Format(Const.SQL_SELECT_VENDOR_OPENID, vendorCode));
                     if (!string.IsNullOrEmpty(userOpenId))
@@ -341,10 +344,6 @@ namespace HuakeWeb.Handle
                         if (AppHelper.PushMsg(tid, userOpenId, content, string.Format(@"id={0}", bid), ref errMsg))
                         {
                             List<string> filePaths = new List<string>();
-                            List<string> sqls = new List<string>
-                            {
-                                string.Format(Const.SQL_CLEAR_RECORD, bid)
-                            };
                             DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_QUERY_RECORD_DETAIL, bid));
                             if (dt != null && dt.Rows.Count > 0)
                             {
@@ -352,32 +351,32 @@ namespace HuakeWeb.Handle
                                 foreach (DataRow dr in dt.Rows)
                                 {
                                     string ids = SafeConvert.SafeString(dr["AutoID"], "");
-                                    sqls.Add(string.Format(Const.SQL_CLEAR_IMG, ids));
                                     if (Directory.Exists(Path.Combine(path, ids)))
                                     {
                                         filePaths.Add(Path.Combine(path, ids));
                                     }
                                 }
                             }
-                            if (ZYSoft.DB.BLL.Common.ExecuteSQLTran(sqls) > 0)
+                            try
                             {
-                                try
+                                filePaths.ForEach(path =>
                                 {
-                                    filePaths.ForEach(path =>
+                                    try
                                     {
-                                        Directory.Delete(path, true);
-                                    });
-                                    context.Response.Write(AjaxResult.success("发送成功"));
-                                }
-                                catch (Exception)
-                                {
-                                    context.Response.Write(AjaxResult.success("发送成功,但文件未能删除"));
-                                }
+                                        if (Directory.Exists(path))
+                                            Directory.Delete(path, true);
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                });
+                                context.Response.Write(AjaxResult.success("发送成功"));
                             }
-                            else
+                            catch (Exception)
                             {
-                                context.Response.Write(AjaxResult.fail("发送失败，原因：清空记录未成功"));
+                                context.Response.Write(AjaxResult.success("发送成功,但文件未能删除"));
                             }
+
                         }
                         else
                         {
@@ -388,6 +387,10 @@ namespace HuakeWeb.Handle
                     {
                         context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到供应商绑定记录"));
                     }
+                }
+                else
+                {
+                    context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到单据记录"));
                 }
             }
             catch (Exception ex)

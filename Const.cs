@@ -16,7 +16,7 @@ namespace HuakeWeb
         public const string SQL_INSERT_SESSION = @"insert into ZYSoftUserSession (UserSession,UserCode,UserName,ExpiredTime)Values('{0}','{1}','{2}','{3}')";
         public const string SQL_BIND_USER = @"update Vendor SET cVenDefine8='{1}' WHERE cVenCode ='{0}' AND ISNULL(cVenDefine8,'') =''";
         public const string SQL_UNBIND_USER = @"update Vendor SET cVenDefine8='' WHERE cVenCode ='{0}'";
-        public const string SQL_QUERY_RECORD = @"SELECT DISTINCT T1.ID,cCode,dDate,T2.cAddress,ISNULL(dCardInDate,'')dCardInDate,cCardTypeCode,cVouchType,ISNULL(cMemo,'')cMemo,iYFMoney_End ,ISNULL(cCardNo,'')cCardNo,ISNULL(cCardUser,'')cCardUser,ISNULL(cCardUserPhone,'')cCardUserPhone,ISNULL(cSendCode,'')cSendCode,iState FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE cVenCode ='{0}' AND dDate BETWEEN '{1}' AND '{2} 23:59:59'";
+        public const string SQL_QUERY_RECORD = @"SELECT DISTINCT T1.ID,cCode,dDate,T2.cAddress,ISNULL(dCardInDate,'')dCardInDate,cCardTypeCode,cVouchType,ISNULL(cMemo,'')cMemo,iYFMoney_End ,ISNULL(cCardNo,'')cCardNo,ISNULL(cCardUser,'')cCardUser,ISNULL(cCardUserPhone,'')cCardUserPhone,ISNULL(cSendCode,'')cSendCode,iState FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE iState IN (1,2) AND cVenCode ='{0}' AND dDate BETWEEN '{1}' AND '{2} 23:59:59'";
         public const string SQL_QUERY_RECORD_BY_ID = @"SELECT DISTINCT T1.ID,cCode,dDate,T2.cAddress,ISNULL(dCardInDate,'')dCardInDate,cCardTypeCode,cVouchType,ISNULL(cMemo,'')cMemo,iYFMoney_End ,ISNULL(cCardNo,'')cCardNo,ISNULL(cCardUser,'')cCardUser,ISNULL(cCardUserPhone,'')cCardUserPhone,ISNULL(cSendCode,'')cSendCode,iState,cVenCode FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE T1.ID ='{0}' AND cVenCode ='{1}'";
         public const string SQL_QUERY_RECORD_DETAIL = @"
             SELECT T1.AutoID,ID,ROW_NUMBER() OVER (PARTITION BY ID ORDER BY T1.AutoID) iRowNo,cSource,cSourceCode,
@@ -33,11 +33,11 @@ namespace HuakeWeb
         public const string SQL_SELECT_IMG_BY_ID = @"SELECT * FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE AutoID='{0}'";
         public const string SQL_DELETE_IMG = @"DELETE FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE AutoID='{0}'";
         public const string SQL_SAVE_IMG = @"INSERT INTO [dbo].[Z_CZHK_WLGL_Vouchs_Picture] (iIDS,cPictureName)VALUES('{0}','{1}');SELECT @@IDENTITY";
-        public const string SQL_SELECT_MSG_CONTENT = @"SELECT T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End ,T3.cAddress,SUM(T3.iNum) AS iNum  from [dbo].[Z_CZHK_WLGL_Vouch] T1 
-                            LEFT JOIN Vendor T2  ON t1.cVenCode = t2.cVenCode 
-                            LEFT JOIN  [dbo].[Z_CZHK_WLGL_Vouchs] T3
+        public const string SQL_SELECT_MSG_CONTENT = @"SELECT T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End ,T3.cAddress,SUM(T3.iNum) AS iNum  from [dbo].[Z_CZHK_WLGL_Vouch] T1 with (NOLOCK)
+                            LEFT JOIN Vendor T2 with (NOLOCK) ON t1.cVenCode = t2.cVenCode 
+                            LEFT JOIN  [dbo].[Z_CZHK_WLGL_Vouchs] T3 with (NOLOCK)
                             ON T1.ID = t3.ID WHERE T1.ID = '{0}' GROUP BY  T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End,t3.cAddress";
-        public const string SQL_SELECT_CANCEL_MSG_CONTENT = @"SELECT DISTINCT cCode,cVenCode,T2.cAddress,ISNULL(cCardNo,'')+ISNULL(cCardUser,'')cCardUser,'单据变更,请重新确认'cCancelReason
-FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE T1.ID ='{0}'";
+        public const string SQL_SELECT_CANCEL_MSG_CONTENT = @"SELECT DISTINCT cCode,cVenCode,T2.cAddress,ISNULL(cCardNo,'无')cCardUser,'单据变更,请重新确认'cCancelReason
+FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 with (NOLOCK) LEFT JOIN Z_CZHK_WLGL_Vouchs T2 with (NOLOCK) ON T1.ID = t2.ID WHERE T1.ID ='{0}'";
     }
 }

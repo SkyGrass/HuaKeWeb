@@ -26,13 +26,18 @@ namespace HuakeWeb.Pages
                     {
                         IsBind = 1;
                         string cVenCode = SafeConvert.SafeString(dt.Rows[0]["cVenCode"], "");
-
                         string session = ZYSoft.DB.BLL.Common.ExecuteScalar(string.Format(Const.SQL_USER_SESSION_BY_CODE, cVenCode));
+
+                        string target = Request.QueryString["target"] ?? "home";
+                        string id = Request.QueryString["id"] ?? "";
                         if (!string.IsNullOrEmpty(session))
                         {
                             Thread.Sleep(300);
                             Response.Cookies.Add(new HttpCookie("session", session));
-                            Response.Redirect("home", false);
+                            if (!string.IsNullOrEmpty(id))
+                                Response.Redirect(string.Format("{0}?id={1}", target, id), false);
+                            else
+                                Response.Redirect(target, false);
                         }
                         else
                         {
@@ -43,7 +48,10 @@ namespace HuakeWeb.Pages
                             {
                                 Thread.Sleep(300);
                                 Response.Cookies.Add(new HttpCookie("session", session));
-                                Response.Redirect("home", false);
+                                if (!string.IsNullOrEmpty(id))
+                                    Response.Redirect(string.Format("{0}?id={1}", target, id), false);
+                                else
+                                    Response.Redirect(target, false);
                             }
                         }
                     }

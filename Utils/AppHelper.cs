@@ -20,7 +20,7 @@ namespace HuakeWeb
 {
     public class AppHelper
     {
-        private static string Id = ConfigurationManager.AppSettings["Id"] ?? "test"; 
+        private static string Id = ConfigurationManager.AppSettings["Id"] ?? "test";
 
         public static bool GetWxConfig(out ZYSoftConfig config, out string errMsg)
         {
@@ -268,7 +268,7 @@ namespace HuakeWeb
 
                 JObject body = new JObject(
                     new JProperty("touser", touser),
-                    new JProperty("url", string.Format(@"{0}?{1}", template.Rows[0]["Url"].ToString(), query)),
+                    new JProperty("url", template.Rows[0]["Url"].ToString().Contains("?") ? string.Format(@"{0}&{1}", template.Rows[0]["Url"].ToString(), query) : string.Format(@"{0}?{1}", template.Rows[0]["Url"].ToString(), query)),
                     new JProperty("template_id", template.Rows[0]["TemplateId"].ToString())
                );
 
@@ -466,6 +466,21 @@ namespace HuakeWeb
 
             }
         }
-
+        public static string UrlEncode(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if (HttpUtility.UrlEncode(c.ToString()).Length > 1)
+                {
+                    sb.Append(HttpUtility.UrlEncode(c.ToString()).ToUpper());
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
     }
 }
