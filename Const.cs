@@ -37,7 +37,7 @@ namespace HuakeWeb
                             LEFT JOIN Vendor T2  ON t1.cVenCode = t2.cVenCode 
                             LEFT JOIN  [dbo].[Z_CZHK_WLGL_Vouchs] T3
                             ON T1.ID = t3.ID WHERE T1.ID = '{0}' GROUP BY  T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End,t3.cAddress";
-        public const string SQL_SELECT_CANCEL_MSG_CONTENT = @"SELECT DISTINCT cCode,cVenCode,T2.cAddress,ISNULL(cCardNo,'')+ISNULL(cCardUser,'')cCardUser,'单据变更,请重新确认'cCancelReason
+        public const string SQL_SELECT_CANCEL_MSG_CONTENT = @"SELECT DISTINCT cCode,cVenCode,T2.cAddress,ISNULL(cCardNo,'')cCardUser,'单据变更,请重新确认'cCancelReason
 FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE T1.ID ='{0}'";
     }
 }

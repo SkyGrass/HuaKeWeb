@@ -389,6 +389,10 @@ namespace HuakeWeb.Handle
                         context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到供应商绑定记录"));
                     }
                 }
+                else
+                {
+                    context.Response.Write(AjaxResult.fail("发送失败，原因：没有查询到单据记录"));
+                }
             }
             catch (Exception ex)
             {
