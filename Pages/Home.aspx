@@ -26,7 +26,7 @@
                         </template>
                         <template>
                             <van-tag v-bind:type="item.step1IsOk?'primary':'warning'">{{item.step1IsOk?'已填写':'未填写'}}</van-tag>
-                            <van-tag v-bind:type="item.step1IsOk?'primary':'warning'">{{item.step2IsOk?'已上传':'未上传'}}</van-tag>
+                            <van-tag v-bind:type="item.step2IsOk?'primary':'warning'">{{item.step2IsOk?'已上传':'未上传'}}</van-tag>
                         </template>
                         <template slot="label">
                             <div>【日期】{{item.dDate |formatDate}}</div>
@@ -141,8 +141,8 @@
                                 data = [];
                             }
                             this.list = data.map(f => {
-                                f.step1IsOk = f.cCardNo != '' && f.cCardUser != '' && f.cCardUserPhone != '';
-                                f.step2IsOk = f.cSendCode != '';
+                                f.step1IsOk = (f.iState <= 2);
+                                f.step2IsOk = (f.iState == 2);
                                 return f;
                             });
                         })
