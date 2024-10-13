@@ -226,8 +226,7 @@ namespace HuakeWeb.Handle
                     {
                         string basePath = System.Configuration.ConfigurationManager.AppSettings["saveDisk"] ?? context.Server.MapPath("~/upload");
                         HttpPostedFile file = context.Request.Files["file"];
-                        string rowId = SafeConvert.SafeString(context.Request.Form["rowId"], ""); //单据id
-                        string mediaId = SafeConvert.SafeString(context.Request.Form["mediaId"], "");
+                        string rowId = SafeConvert.SafeString(context.Request.Form["rowId"], ""); //单据id 
                         string fileType = "." + (SafeConvert.SafeString(context.Request.Form["fileType"], "png").Split('/')).LastOrDefault();
                         string filePath = Path.Combine(basePath, rowId);
                         if (!Directory.Exists(filePath))
@@ -344,7 +343,7 @@ namespace HuakeWeb.Handle
                         if (AppHelper.PushMsg(tid, userOpenId, content, string.Format(@"id={0}", bid), ref errMsg))
                         {
                             List<string> filePaths = new List<string>();
-                            DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_QUERY_RECORD_DETAIL, bid));
+                            DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(string.Format(Const.SQL_SELECT_IMG_IDS, bid));
                             if (dt != null && dt.Rows.Count > 0)
                             {
                                 string path = System.Configuration.ConfigurationManager.AppSettings["saveDisk"] ?? context.Server.MapPath("~/upload");

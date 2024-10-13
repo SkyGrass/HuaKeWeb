@@ -20,8 +20,8 @@ namespace HuakeWeb
         public const string SQL_QUERY_RECORD_BY_ID = @"SELECT DISTINCT T1.ID,cCode,dDate,T2.cAddress,ISNULL(dCardInDate,'')dCardInDate,cCardTypeCode,cVouchType,ISNULL(cMemo,'')cMemo,iYFMoney_End ,ISNULL(cCardNo,'')cCardNo,ISNULL(cCardUser,'')cCardUser,ISNULL(cCardUserPhone,'')cCardUserPhone,ISNULL(cSendCode,'')cSendCode,iState,cVenCode FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 LEFT JOIN Z_CZHK_WLGL_Vouchs T2 ON T1.ID = t2.ID WHERE T1.ID ='{0}' AND cVenCode ='{1}'";
         public const string SQL_QUERY_RECORD_DETAIL = @"
             SELECT T1.AutoID,ID,ROW_NUMBER() OVER (PARTITION BY ID ORDER BY T1.AutoID) iRowNo,cSource,cSourceCode,
-            cCusName,cAddress,iQuantity, iNum ,ISNULL(T2.iUploadNum,0)iUploadNum FROM [dbo].[Z_CZHK_WLGL_Vouchs] T1
-            LEFT JOIN (SELECT COUNT(1)AS iUploadNum,iIDs FROM Z_CZHK_WLGL_Vouchs_Picture GROUP BY iIDs) T2 
+            cCusName,cAddress,iQuantity, iNum ,ISNULL(T2.iUploadNum,0)iUploadNum FROM [dbo].[Z_CZHK_WLGL_Vouchs] T1 with (NOLOCK) 
+            LEFT JOIN (SELECT COUNT(1)AS iUploadNum,iIDs FROM Z_CZHK_WLGL_Vouchs_Picture with (NOLOCK) GROUP BY iIDs) T2 
             ON T1.AutoID =T2.iIDs WHERE ID = '{0}'";
         public const string SQL_UPDATE_RECORD = @"UPDATE [dbo].[Z_CZHK_WLGL_Vouch] SET dCardInDate = '{1}',cCardNo = '{2}',cCardUser = '{3}' ,
             cCardUserPhone = '{4}',iState=2 WHERE ID ='{0}' AND ISNULL(iState,0) =1";
@@ -29,7 +29,7 @@ namespace HuakeWeb
             cCardUserPhone = '',cSendCode ='',iState = 1 WHERE ID ='{0}'";
         public const string SQL_CLEAR_IMG = @"DELETE FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE iIDs='{0}'";
         public const string SQL_UPDATE_RECORD_ITEM = @"UPDATE [dbo].[Z_CZHK_WLGL_Vouch] SET {0} WHERE iState IN (2) AND ID ='{1}'";
-        public const string SQL_QUERY_IMG = @"SELECT * from Z_CZHK_WLGL_Vouchs_Picture WHERE iIDs ='{0}'";
+        public const string SQL_QUERY_IMG = @"SELECT * from Z_CZHK_WLGL_Vouchs_Picture with (NOLOCK)  WHERE iIDs ='{0}'";
         public const string SQL_SELECT_IMG_BY_ID = @"SELECT * FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE AutoID='{0}'";
         public const string SQL_DELETE_IMG = @"DELETE FROM [dbo].[Z_CZHK_WLGL_Vouchs_Picture] WHERE AutoID='{0}'";
         public const string SQL_SAVE_IMG = @"INSERT INTO [dbo].[Z_CZHK_WLGL_Vouchs_Picture] (iIDS,cPictureName)VALUES('{0}','{1}');SELECT @@IDENTITY";
@@ -39,5 +39,6 @@ namespace HuakeWeb
                             ON T1.ID = t3.ID WHERE T1.ID = '{0}' GROUP BY  T1.cCode,T1.cVenCode,T2.cVenName,T1.iYFMoney_End,t3.cAddress";
         public const string SQL_SELECT_CANCEL_MSG_CONTENT = @"SELECT DISTINCT cCode,cVenCode,T2.cAddress,ISNULL(cCardNo,'无')cCardUser,'单据变更,请重新确认'cCancelReason
 FROM [dbo].[Z_CZHK_WLGL_Vouch] T1 with (NOLOCK) LEFT JOIN Z_CZHK_WLGL_Vouchs T2 with (NOLOCK) ON T1.ID = t2.ID WHERE T1.ID ='{0}'";
+        public const string SQL_SELECT_IMG_IDS = @"SELECT AutoID from Z_CZHK_WLGL_Vouchs with (NOLOCK) WHERE ID='{0}'";
     }
 }
